@@ -102,12 +102,12 @@ void gameover(){
    delay(60);
 }
 
-void colission(Bird bird,Pipe pipe)
+bool colission(Bird bird,Pipe pipe)
 {
     if( pipe.upper==true && ( bird.x + 19 ) >= pipe.x && bird.y <= pipe.height)
-        gameover();
+        true;
     else if( pipe.upper==false && ( bird.x + 19 ) >= pipe.x && ( bird.y + 14 ) >= pipe.y )
-        gameover();
+        true;
 }
 
 
@@ -130,7 +130,8 @@ void animation(){
   _pipe2.setMovement('l');
   _pipe2.move();
 
-  colission(_bird,_pipe1);
+  if(colission(_bird,_pipe1))
+    _bird.dead=true;;
   colission(_bird,_pipe2);
 }
 
@@ -141,11 +142,11 @@ void animation(){
 
 
 void loop() {
-// if(gameOver==false){
+ if(_bird.dead==false){
   animation();
-//  }else
-//  {
-//    gameover();
-//  }
+  }else
+  {
+    gameover();
+  }
 }
 

@@ -11,6 +11,7 @@ Bird::Bird(int x, int y, unsigned char* enemyImage)
   dropRate=2;
   dropCounter=0;
   movementCounter=0;
+  dead=false;
 }
 
 Bird::~Bird()
