@@ -11,6 +11,8 @@ class Sprite
         bool movement;
         char direction;
         unsigned char* PixelMap;
+        int movementRate;
+        int movementCounter;
         Sprite();
         virtual ~Sprite();
         virtual void move();
