@@ -6,6 +6,8 @@
 #include <string.h> 
 
 
+
+
 int x=0;
 int y=0;
 int yP=0;
@@ -103,9 +105,10 @@ void animation(){
     _bird.setMovement('d');
     _bird.move();
   }
+  delay(1);
   xP--;
   xP1--;
-  VGA.clear();
+  _render.clear();
   _render.render(&_bird);
   _render.render(&_pipe1);
   _render.render(&_pipe2);
@@ -126,13 +129,29 @@ void gameover(){
    delay(60);
 }
 
+char score [4];
+int count = 0;
+int interval=1000;
+unsigned long previousMillis=0;
+unsigned long currentMillis;
 
 void loop() {
 // if(gameOver==false){
   animation();
+  currentMillis = millis();
+   if ((unsigned long)(currentMillis - previousMillis) >= interval) {
+      count++;
+      previousMillis = currentMillis;
+   }
+  itoa(count,score,10);
+  VGA.setColor(RED);
+  VGA.printtext(42, 30, score);
+    // VGA.clear();
 //  }else
 //  {
 //    gameover();
 //  }
 }
+
+ 
 
