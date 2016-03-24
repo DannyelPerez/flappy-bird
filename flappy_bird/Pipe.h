@@ -4,7 +4,8 @@
 class Pipe: public Sprite
 {
 	public:
-		Pipe(int x, int y, int width, int height, unsigned char* enemyImage);
+		Pipe(int x, int y, int width, int height, unsigned char* enemyImage,bool upper);
+        bool upper;
 		virtual ~Pipe();
 		void move();
 	protected:

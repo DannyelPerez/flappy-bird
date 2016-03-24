@@ -82,8 +82,8 @@ unsigned char pipe[] = {
 };
 
 Bird _bird(x,y,bird);
-Pipe _pipe1(xP,yP,23,43,pipe);
-Pipe _pipe2(xP1,yP1,23,30,pipe);
+Pipe _pipe1(xP,yP,23,43,pipe,true);
+Pipe _pipe2(xP1,yP1,23,30,pipe,false);
 Renderer _render;
 
 void setup() {
@@ -96,6 +96,22 @@ int rand_range(int min_n, int max_n)
 {
   return rand() % (max_n - min_n + 1) + min_n;
 }
+
+void gameover(){
+   VGA.clear();
+   VGA.printtext(42, 30, "Game Over");
+   VGA.setColor(RED);
+   delay(60);
+}
+
+bool colission(Bird bird,Pipe pipe)
+{
+    if( pipe.upper==true && ( bird.x + 19 ) >= pipe.x && bird.y <= pipe.height)
+        true;
+    else if( pipe.upper==false && ( bird.x + 19 ) >= pipe.x && ( bird.y + 14 ) >= pipe.y )
+        true;
+}
+
 
 void animation(){
   if(digitalRead(FPGA_BTN_1)){    
@@ -117,17 +133,15 @@ void animation(){
   _pipe2.setMovement('l');
   _pipe2.move();
 
-  gameOver=true;
+  if(colission(_bird,_pipe1))
+    _bird.dead=true;;
+  colission(_bird,_pipe2);
 }
 
 
 
-void gameover(){
-   VGA.clear();
-   VGA.printtext(42, 30, "Game Over");
-   VGA.setColor(RED);
-   delay(60);
-}
+
+
 
 char score [4];
 int count = 0;
@@ -136,21 +150,19 @@ unsigned long previousMillis=0;
 unsigned long currentMillis;
 
 void loop() {
-// if(gameOver==false){
-  animation();
-  currentMillis = millis();
-   if ((unsigned long)(currentMillis - previousMillis) >= interval) {
+  if(_bird.dead==false){
+    animation();
+    currentMillis = millis();
+    if ((unsigned long)(currentMillis - previousMillis) >= interval) {
       count++;
       previousMillis = currentMillis;
-   }
-  itoa(count,score,10);
-  VGA.setColor(RED);
-  VGA.printtext(42, 30, score);
-    // VGA.clear();
-//  }else
-//  {
-//    gameover();
-//  }
+    }
+    itoa(count,score,10);
+    VGA.setColor(RED);
+    VGA.printtext(42, 30, score);
+  }else{
+    gameover();
+  }
 }
 
  
