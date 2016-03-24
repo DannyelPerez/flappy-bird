@@ -5,17 +5,14 @@
 
 class Renderer
 {
-    public:
-        Renderer();
-        virtual ~Renderer();
-        
-        
-        unsigned char* enemyImage;
-        
-        void render(Sprite* sprite);
-        void clear();
-    protected:
-    private:
+	public:
+		Renderer();
+		virtual ~Renderer();
+		unsigned char* enemyImage;
+		void render(Sprite* sprite);
+		void clear();
+	protected:
+	private:
 };
 
 #endif // RENDERER_H

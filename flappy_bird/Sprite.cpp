@@ -12,6 +12,6 @@ void Sprite::move(){
 }
 
 void Sprite::setMovement(char direction){
-   movement  = true;
-   this->direction = direction; 
+	movement  = true;
+	this->direction = direction; 
 }
