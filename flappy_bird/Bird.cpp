@@ -1,9 +1,8 @@
 #include "Bird.h"
-
 Bird::Bird(int x, int y, unsigned char* enemyImage)
 {
     //ctor
-    PixelMap = enemyImage;
+    this->PixelMap = enemyImage;
     width = 19;
     height = 14;
     this->x = x;
@@ -15,12 +14,17 @@ Bird::~Bird()
     //dtor
 }
 
-void Bird::jump(bool j){
-     if(j)
-    {    
-      y--;
-    }else{
-      delay(10);
-      y++;
+void Bird::move(){
+     if(movement)
+    {
+      if (direction=='u')
+          {
+            y--;
+          }
+      else if(direction=='d'){
+        y++;    
+    }
     }
 }
+
+
