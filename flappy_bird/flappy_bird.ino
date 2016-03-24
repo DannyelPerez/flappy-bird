@@ -105,7 +105,7 @@ void animation(){
     _bird.setMovement('d');
     _bird.move();
   }
-  delay(1);
+//  delay(0.5);
   xP--;
   xP1--;
   _render.clear();
