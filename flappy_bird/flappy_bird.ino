@@ -139,14 +139,6 @@ int rand_range(int min_n, int max_n){
   return rand() % (max_n - min_n + 1) + min_n;
 }
 
-bool colission(Bird bird,Pipe pipe){
-  if( pipe.upper==true && ( bird.x + 19 ) >= pipe.x && bird.y <= pipe.height)
-    return true;
-  else if( pipe.upper==false && ( bird.x + 19 ) >= pipe.x && ( bird.y + 14 ) >= pipe.y )
-    return true;
-  return false;
-}
-
 void loop() {
   switch (gameState) {
         case MENU:
@@ -155,6 +147,12 @@ void loop() {
         case LEVEL1:
             level1();
             break;
+        case LEVEL2:
+            level2();
+            break;
+        case LEVEL3:
+            level3();
+            break;        
         case CREDITS: 
             credits();
             break;
@@ -205,8 +203,8 @@ void menu() {
 }
 
 void level1(){
-   VGA.printtext(60, 30,"Level 1");
-   if(digitalRead(FPGA_BTN_0)){    
+  VGA.printtext(60, 30,"Level 1");
+  if(digitalRead(FPGA_BTN_0)){    
     _bird.setMovement('u');
     _bird.move();
   }else{
@@ -228,6 +226,12 @@ void level1(){
     _render.clear();
     gameState=MENU;
   }
+}
+
+void level2(){
+}
+
+void level3(){
 }
 
 void credits(){
