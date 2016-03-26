@@ -111,7 +111,6 @@ unsigned char spriteSkull[]={
   int y=0;
   int yP=0;
   int yP1=90;
-  boolean gameOver=false;
   int xP=50;
   int xP1=100;
   char gameState = MENU;
@@ -148,41 +147,7 @@ bool colission(Bird bird,Pipe pipe){
   return false;
 }
 
-
-void animation(){
-  if(digitalRead(FPGA_BTN_1)){    
-    _bird.setMovement('u');
-    _bird.move();
-  }else{
-    _bird.setMovement('d');
-    _bird.move();
-  }
-  xP--;
-  xP1--;
-  _render.clear();
-  _render.render(&_bird);
-  _render.render(&_pipe1);
-  _render.render(&_pipe2);
-  _pipe1.setMovement('l');
-  _pipe1.move();
-  _pipe2.setMovement('l');
-  _pipe2.move();
-
-  if(colission(_bird,_pipe1)){
-      _bird.dead=true;
-  }
-    if(colission(_bird,_pipe2)){
-      _bird.dead=true;
-    }
-}
-
 void loop() {
-  // if(_bird.dead==false){
-  //   animation();
-    
-  // }else{
-  //   gameover();
-  // }
   switch (gameState) {
         case MENU:
             menu();
@@ -241,6 +206,28 @@ void menu() {
 
 void level1(){
    VGA.printtext(60, 30,"Level 1");
+   if(digitalRead(FPGA_BTN_0)){    
+    _bird.setMovement('u');
+    _bird.move();
+  }else{
+    _bird.setMovement('d');
+    _bird.move();
+  }
+  xP--;
+  xP1--;
+  _render.clear();
+  _render.render(&_bird);
+  _render.render(&_pipe1);
+  _render.render(&_pipe2);
+  _pipe1.setMovement('l');
+  _pipe1.move();
+  _pipe2.setMovement('l');
+  _pipe2.move();
+
+  if(_bird.isCollidingWith(&_pipe1)||_bird.isCollidingWith(&_pipe2)){
+    _render.clear();
+    gameState=MENU;
+  }
 }
 
 void credits(){
