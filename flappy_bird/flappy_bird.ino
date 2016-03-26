@@ -5,15 +5,8 @@
 #include <stdio.h>
 #include <string.h> 
 
-
-int x=0;
-int y=0;
-int yP=0;
-int yP1=90;
-boolean gameOver=false;
-int xP=50;
-int xP1=100;
-unsigned char bird[] = {
+//sprites:
+unsigned char spriteBird[] = {
   BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,
   BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,  BLACK,  BLACK,  BLACK,  BLACK,
   BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK, BLACK, YELLOW,  YELLOW,  YELLOW,  YELLOW,  BLACK, WHITE, BLACK, BLACK,  BLACK,  BLACK,  BLACK,  BLACK,
@@ -30,7 +23,7 @@ unsigned char bird[] = {
   BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK
 };
 
-unsigned char pipe[] = {
+unsigned char spritePipe[] = {
   BLACK, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, BLACK,
   BLACK, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, BLACK,
   BLACK, WHITE, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, BLACK,
@@ -79,10 +72,62 @@ unsigned char pipe[] = {
   GREEN, WHITE, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN
 };
 
-Bird _bird(x,y,bird);
-Pipe _pipe1(xP,yP,23,43,pipe,true);
-Pipe _pipe2(xP1,yP1,23,30,pipe,false);
-Renderer _render;
+unsigned char spriteSkull[]={
+  RED,RED,RED,RED,RED,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,RED,RED,RED,RED,RED,
+  RED,RED,RED,BLACK,BLACK,BLACK,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,BLACK,BLACK,BLACK,RED,RED,RED,
+  RED,RED,BLACK,BLACK,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,BLACK,BLACK,RED,RED,
+  RED,BLACK,BLACK,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,BLACK,BLACK,RED,
+  RED,BLACK,BLACK,WHITE,WHITE,WHITE,BLACK,BLACK,BLACK,WHITE,WHITE,WHITE,BLACK,BLACK,BLACK,WHITE,WHITE,WHITE,BLACK,BLACK,RED,
+  BLACK,BLACK,WHITE,WHITE,BLACK,BLACK,BLACK,BLACK,WHITE,WHITE,WHITE,WHITE,WHITE,BLACK,BLACK,BLACK,BLACK,WHITE,WHITE,BLACK,BLACK,
+  BLACK,WHITE,WHITE,BLACK,BLACK,BLACK,BLACK,BLACK,WHITE,WHITE,WHITE,WHITE,WHITE,BLACK,BLACK,BLACK,BLACK,BLACK,WHITE,WHITE,BLACK,
+  BLACK,WHITE,WHITE,BLACK,BLACK,BLACK,BLACK,BLACK,WHITE,WHITE,WHITE,WHITE,WHITE,BLACK,BLACK,BLACK,BLACK,BLACK,WHITE,WHITE,BLACK,
+  BLACK,WHITE,WHITE,BLACK,BLACK,BLACK,BLACK,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,BLACK,BLACK,BLACK,BLACK,WHITE,WHITE,BLACK,
+  BLACK,WHITE,WHITE,BLACK,BLACK,BLACK,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,BLACK,BLACK,BLACK,WHITE,WHITE,BLACK,
+  BLACK,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,BLACK,WHITE,WHITE,WHITE,BLACK,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,BLACK,
+  BLACK,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,BLACK,BLACK,WHITE,WHITE,WHITE,BLACK,BLACK,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,BLACK,
+  BLACK,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,BLACK,BLACK,WHITE,WHITE,WHITE,BLACK,BLACK,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,BLACK,
+  BLACK,BLACK,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,BLACK,BLACK,
+  RED,BLACK,WHITE,WHITE,BLACK,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,BLACK,WHITE,WHITE,BLACK,WHITE,WHITE,BLACK,RED,
+  RED,BLACK,BLACK,BLACK,BLACK,WHITE,WHITE,BLACK,WHITE,BLACK,WHITE,BLACK,WHITE,BLACK,WHITE,WHITE,BLACK,BLACK,BLACK,BLACK,RED,
+  RED,RED,RED,RED,BLACK,WHITE,WHITE,BLACK,WHITE,BLACK,WHITE,BLACK,WHITE,BLACK,WHITE,WHITE,BLACK,RED,RED,RED,RED,
+  RED,RED,RED,RED,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,RED,RED,RED,RED,
+  RED,RED,RED,RED,RED,RED,RED,RED,RED,RED,RED,RED,RED,RED,RED,RED,RED,RED,RED,RED,RED,
+  RED,RED,RED,RED,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,RED,RED,RED,RED,
+  RED,RED,RED,RED,BLACK,WHITE,BLACK,WHITE,BLACK,WHITE,BLACK,WHITE,BLACK,WHITE,BLACK,WHITE,BLACK,RED,RED,RED,RED,
+  RED,RED,RED,RED,BLACK,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,BLACK,RED,RED,RED,RED,
+  RED,RED,RED,RED,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,RED,RED,RED,RED,
+};
+
+//const:
+  const char MENU = 0;
+  const char LEVEL1 = 1;
+  const char LEVEL2 = 2;
+  const char LEVEL3 = 3;
+  const char CREDITS = 4;
+  const char GAMEOVER = 5;
+
+//local variables: 
+  int x=0;
+  int y=0;
+  int yP=0;
+  int yP1=90;
+  int xP=50;
+  int xP1=100;
+  char gameState = MENU;
+
+//objects declaration: 
+  Bird _bird(x,y,spriteBird);
+  Pipe _pipe1(xP,yP,23,43,spritePipe,true);
+  Pipe _pipe2(xP1,yP1,23,30,spritePipe,false);
+  Renderer _render;
+
+//screens: 
+  void menu();
+  void level1();
+  void level2();
+  void level3();
+  void credits();
+  void gameover();
 
 void setup() {
   VGA.clear();
@@ -90,29 +135,78 @@ void setup() {
   Serial.begin(9600);
 }
 
-int rand_range(int min_n, int max_n)
-{
+int rand_range(int min_n, int max_n){
   return rand() % (max_n - min_n + 1) + min_n;
 }
 
-void gameover(){
-   VGA.clear();
-   VGA.printtext(42, 30, "Game Over");
-   VGA.setColor(RED);
-   delay(60);
+bool colission(Bird bird,Pipe pipe){
+  if( pipe.upper==true && ( bird.x + 19 ) >= pipe.x && bird.y <= pipe.height)
+    return true;
+  else if( pipe.upper==false && ( bird.x + 19 ) >= pipe.x && ( bird.y + 14 ) >= pipe.y )
+    return true;
+  return false;
 }
 
-bool colission(Bird bird,Pipe pipe)
-{
-    if( pipe.upper==true && ( bird.x + 19 ) >= pipe.x && bird.y <= pipe.height)
-        true;
-    else if( pipe.upper==false && ( bird.x + 19 ) >= pipe.x && ( bird.y + 14 ) >= pipe.y )
-        true;
+void loop() {
+  switch (gameState) {
+        case MENU:
+            menu();
+            break;
+        case LEVEL1:
+            level1();
+            break;
+        case CREDITS: 
+            credits();
+            break;
+        case GAMEOVER: 
+            gameover();
+            break;
+    }
 }
 
+/* GetTime:
+    char time [4];
+    int count = 0;
+    int interval=1000;
+    unsigned long previousMillis=0;
+    unsigned long currentMillis; 
+    the next section needs to be include on loop method: 
+      currentMillis = millis();
+      if ((unsigned long)(currentMillis - previousMillis) >= interval) {
+        count++;
+        previousMillis = currentMillis;
+      }
+      itoa(count,time,10);
+      VGA.setColor(RED);
+      VGA.printtext(42, 30, time);
+*/
 
-void animation(){
-  if(digitalRead(FPGA_BTN_1)){    
+void menu() {
+  VGA.writeArea(20,20,19,14,spriteBird);
+  VGA.printtext(45, 25,"Flappy Bird");
+  if(!digitalRead(FPGA_SW_0)){
+    VGA.setColor(BLUE);
+  }
+  VGA.printtext(48,53, "Start Game");
+  VGA.setColor(WHITE);
+  if(digitalRead(FPGA_SW_0)){
+    VGA.setColor(BLUE);
+  }
+  VGA.printtext(55,73,"Credits");
+  VGA.setColor(WHITE);
+  if(digitalRead(FPGA_BTN_0))
+    if(!digitalRead(FPGA_SW_0)){
+      gameState = LEVEL1;
+      VGA.clear();
+    }else{
+      gameState = CREDITS;
+      VGA.clear();
+    }
+}
+
+void level1(){
+   VGA.printtext(60, 30,"Level 1");
+   if(digitalRead(FPGA_BTN_0)){    
     _bird.setMovement('u');
     _bird.move();
   }else{
@@ -121,7 +215,7 @@ void animation(){
   }
   xP--;
   xP1--;
-  VGA.clear();
+  _render.clear();
   _render.render(&_bird);
   _render.render(&_pipe1);
   _render.render(&_pipe2);
@@ -130,23 +224,30 @@ void animation(){
   _pipe2.setMovement('l');
   _pipe2.move();
 
-  if(colission(_bird,_pipe1))
-    _bird.dead=true;;
-  colission(_bird,_pipe2);
-}
-
-
-
-
-
-
-
-void loop() {
- if(_bird.dead==false){
-  animation();
-  }else
-  {
-    gameover();
+  if(_bird.isCollidingWith(&_pipe1)||_bird.isCollidingWith(&_pipe2)){
+    _render.clear();
+    gameState=MENU;
   }
 }
+
+void credits(){
+  VGA.setColor(WHITE);
+  VGA.printtext(20, 25,"Daniel Perez");
+  VGA.printtext(20, 55,"David Chavarria");
+  VGA.printtext(20, 85,"Josue Enamorado");
+  if(digitalRead(FPGA_BTN_1)){
+    gameState = MENU;
+    VGA.clear();  
+  }
+}
+
+void gameover(){
+   VGA.setColor(RED);
+   VGA.printtext(42, 30, "Game Over");
+   VGA.writeArea(70,55 ,21, 23, spriteSkull);
+   if(digitalRead(FPGA_BTN_1)){
+      gameState = MENU;
+      VGA.clear();  
+    }
+} 
 

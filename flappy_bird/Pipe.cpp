@@ -1,7 +1,6 @@
 #include "Pipe.h"
 Pipe::Pipe(int x, int y, int width, int height, unsigned char* enemyImage,bool upper)
 {
-  //ctor
   this->PixelMap = enemyImage;
   this->width = width;
   this->height =height;
@@ -19,14 +18,15 @@ Pipe::~Pipe()
 
 void Pipe::move(){
   if(++movementCounter == movementRate){
-     movementCounter  = 0;
-  if(movement){
-    if (direction=='l'){
-      x--;
+    movementCounter  = 0;
+    if(movement){
+      if (direction=='l'){
+        x--;
+      }
+      if(x<=0){
+        x=137;  
+      }
     }
-    if(x<=0)
-      x=137;  
-  }
   }
 }
 
