@@ -5,17 +5,8 @@
 #include <stdio.h>
 #include <string.h> 
 
-
-
-
-int x=0;
-int y=0;
-int yP=0;
-int yP1=90;
-boolean gameOver=false;
-int xP=50;
-int xP1=100;
-unsigned char bird[] = {
+//sprites:
+unsigned char spriteBird[] = {
   BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,
   BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,  BLACK,  BLACK,  BLACK,  BLACK,
   BLACK,  BLACK,  BLACK,  BLACK,  BLACK,  BLACK, BLACK, YELLOW,  YELLOW,  YELLOW,  YELLOW,  BLACK, WHITE, BLACK, BLACK,  BLACK,  BLACK,  BLACK,  BLACK,
@@ -81,10 +72,37 @@ unsigned char pipe[] = {
   GREEN, WHITE, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN
 };
 
-Bird _bird(x,y,bird);
+//const:
+const char MENU = 0;
+const char LEVEL1 = 1;
+const char LEVEL2 = 2;
+const char LEVEL3 = 3;
+const char CREDITS = 4;
+const char GAMEOVER = 5;
+
+//local variables: 
+int x=0;
+int y=0;
+int yP=0;
+int yP1=90;
+boolean gameOver=false;
+int xP=50;
+int xP1=100;
+char gameState = MENU;
+
+//objects declaration: 
+Bird _bird(x,y,spriteBird);
 Pipe _pipe1(xP,yP,23,43,pipe,true);
 Pipe _pipe2(xP1,yP1,23,30,pipe,false);
 Renderer _render;
+
+//screens: 
+void menu();
+void level1();
+void level2();
+void level3();
+void credits();
+void gameover();
 
 void setup() {
   VGA.clear();
@@ -92,8 +110,7 @@ void setup() {
   Serial.begin(9600);
 }
 
-int rand_range(int min_n, int max_n)
-{
+int rand_range(int min_n, int max_n){
   return rand() % (max_n - min_n + 1) + min_n;
 }
 
@@ -102,14 +119,17 @@ void gameover(){
    VGA.printtext(42, 30, "Game Over");
    VGA.setColor(RED);
    delay(60);
+   if(digitalRead(FPGA_BTN_1)){    
+    _bird.dead=false;
+    }
 }
 
-bool colission(Bird bird,Pipe pipe)
-{
-    if( pipe.upper==true && ( bird.x + 19 ) >= pipe.x && bird.y <= pipe.height)
-        true;
-    else if( pipe.upper==false && ( bird.x + 19 ) >= pipe.x && ( bird.y + 14 ) >= pipe.y )
-        true;
+bool colission(Bird bird,Pipe pipe){
+  if( pipe.upper==true && ( bird.x + 19 ) >= pipe.x && bird.y <= pipe.height)
+    return true;
+  else if( pipe.upper==false && ( bird.x + 19 ) >= pipe.x && ( bird.y + 14 ) >= pipe.y )
+    return true;
+  return false;
 }
 
 
@@ -121,7 +141,6 @@ void animation(){
     _bird.setMovement('d');
     _bird.move();
   }
-//  delay(0.5);
   xP--;
   xP1--;
   _render.clear();
@@ -133,36 +152,73 @@ void animation(){
   _pipe2.setMovement('l');
   _pipe2.move();
 
-  if(colission(_bird,_pipe1))
-    _bird.dead=true;;
-  colission(_bird,_pipe2);
+  if(colission(_bird,_pipe1)){
+      _bird.dead=true;
+  }
+    if(colission(_bird,_pipe2)){
+      _bird.dead=true;
+    }
 }
 
-
-
-
-
-
-char score [4];
-int count = 0;
-int interval=1000;
-unsigned long previousMillis=0;
-unsigned long currentMillis;
-
 void loop() {
-  if(_bird.dead==false){
-    animation();
-    currentMillis = millis();
-    if ((unsigned long)(currentMillis - previousMillis) >= interval) {
-      count++;
-      previousMillis = currentMillis;
+  // if(_bird.dead==false){
+  //   animation();
+    
+  // }else{
+  //   gameover();
+  // }
+  switch (gameState) {
+        case MENU:
+            menu();
+            break;
+        case LEVEL1:
+            level1();
+            break;
     }
-    itoa(count,score,10);
-    VGA.setColor(RED);
-    VGA.printtext(42, 30, score);
-  }else{
-    gameover();
+}
+
+/* GetTime:
+    char time [4];
+    int count = 0;
+    int interval=1000;
+    unsigned long previousMillis=0;
+    unsigned long currentMillis; 
+    the next section needs to be include on loop method: 
+      currentMillis = millis();
+      if ((unsigned long)(currentMillis - previousMillis) >= interval) {
+        count++;
+        previousMillis = currentMillis;
+      }
+      itoa(count,time,10);
+      VGA.setColor(RED);
+      VGA.printtext(42, 30, time);
+*/
+
+void menu() {
+  VGA.writeArea(20,20,19,14,spriteBird);
+  VGA.printtext(45, 25,"Flappy Bird");
+  if(!digitalRead(FPGA_SW_0)){
+    VGA.setColor(BLUE);
   }
+  VGA.printtext(48,53, "Start Game");
+  VGA.setColor(WHITE);
+  if(digitalRead(FPGA_SW_0)){
+    VGA.setColor(BLUE);
+  }
+  VGA.printtext(55,73,"Credits");
+  VGA.setColor(WHITE);
+  if(digitalRead(FPGA_BTN_0))
+    if(!digitalRead(FPGA_SW_0)){
+      gameState = MENU;
+      VGA.clear();
+    }else{
+      gameState = CREDITS;
+      VGA.clear();
+    }
+}
+
+void level1(){
+   VGA.printtext(60, 30,"Level 1");
 }
 
  
