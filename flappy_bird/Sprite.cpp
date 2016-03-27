@@ -27,6 +27,3 @@ void Sprite::setPositions(int x, int y){
 	this->y=y;
 }
 
-void Sprite::stopMovement(){
-	movement=false;
-}

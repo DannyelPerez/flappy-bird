@@ -17,7 +17,6 @@ class Sprite
         virtual ~Sprite();
         virtual void move();
         void setMovement(char direction);
-        void stopMovement();
         void setPositions(int x, int y);
         bool isCollidingWith(Sprite* sprite);
     protected:

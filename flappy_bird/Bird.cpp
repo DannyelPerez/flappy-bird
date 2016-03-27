@@ -7,10 +7,7 @@ Bird::Bird(int x, int y, unsigned char* enemyImage)
   this->x = x;
   this->y = y;
   movementRate=3;
-  dropRate=2;
-  dropCounter=0;
   movementCounter=0;
-  dead=false;
 }
 
 Bird::~Bird()

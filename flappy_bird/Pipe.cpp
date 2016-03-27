@@ -1,5 +1,5 @@
 #include "Pipe.h"
-Pipe::Pipe(int x, int y, int width, int height, unsigned char* enemyImage,bool upper)
+Pipe::Pipe(int x, int y, int width, int height, unsigned char* enemyImage)
 {
   this->PixelMap = enemyImage;
   this->width = width;
@@ -8,7 +8,6 @@ Pipe::Pipe(int x, int y, int width, int height, unsigned char* enemyImage,bool u
   this->y = y;
   movementRate=2;
   movementCounter=0;
-  this->upper=upper;
 }
 
 Pipe::~Pipe()
